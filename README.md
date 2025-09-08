@@ -1,2 +1,2 @@
-# autoPostX
+# autoPost
 Automated X journaling agent using AI...
