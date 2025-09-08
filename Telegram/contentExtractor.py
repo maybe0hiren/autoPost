@@ -3,7 +3,7 @@ import os
 import datetime
 import requests
 
-token = "TOKEN HERE"
+token = "TOKEN"
 bot = telebot.TeleBot(token)
 storage = "postContent"
 

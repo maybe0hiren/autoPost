@@ -1,3 +1,5 @@
 env/
 etc/
 cache/
+capGenAI/
+__pycache__
