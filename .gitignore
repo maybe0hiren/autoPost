@@ -4,3 +4,4 @@ cache/
 capGenAI/
 __pycache__
 captions.json
+postContent/
