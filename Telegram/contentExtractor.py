@@ -7,6 +7,9 @@ token = "TOKEN"
 bot = telebot.TeleBot(token)
 storage = "postContent"
 
+def getBot():
+    return bot
+
 def getData():
     today = datetime.date.today().strftime("%Y-%m-%d")
     folder = os.path.join(storage, today)
@@ -17,7 +20,15 @@ def saveTasks(task):
     folder = getData()
     textFile = os.path.join(folder, "tasks.txt")
     with open(textFile, "a", encoding="utf-8") as f:
-        f.write(f"{task.text}\n")
+        f.write(f"{task.text[6:]}\n")
+    print(f"Successfully added -- {task.text[6:]}")
+
+def saveEditedCaption(caption):
+    folder = getData()
+    textFile = os.path.join(folder, "caption.txt")
+    with open(textFile, "w", encoding="utf-8") as f:
+        f.write(f"{caption.text[10:]}\n")
+    print(f"New Caption Saved: \n {caption.text[10:]}")
 
 def saveImage(image):
     folder = getData()
@@ -29,17 +40,3 @@ def saveImage(image):
     imagePath = os.path.join(folder, imageName)
     with open(imagePath, "wb") as f:
         f.write(imageData)
-
-@bot.message_handler(content_types=["text"])
-def handleTasks(task):
-    saveTasks(task)
-    bot.reply_to(task, "📌 Task saved for today!")
-
-@bot.message_handler(content_types=["photo"])
-def handleImage(image):
-    saveImage(image)
-    bot.reply_to(image, "📷 Image saved for today!")
-
-print("Bot running...")
-bot.polling()
-

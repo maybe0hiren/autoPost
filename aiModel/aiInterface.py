@@ -7,13 +7,15 @@ def saveCaption(taskList, modelPath="./capGenAI"):
     tasksText = "; ".join(taskList)
     prompt = f"Tasks: {tasksText} Caption: "
     output = generator(prompt, max_length=250, do_sample=True, top_p=0.95, num_return_sequences=1)
-    caption = output[0]['generated_text']
-    if caption.startswith(prompt):
-        caption = caption[len(prompt):].strip()
+    if not taskList:
+        caption = "Psych! No tasks = No caption... Work harder!"
     else:
-        caption = caption.strip()
+        caption = output[0]['generated_text']
+        if caption.startswith(prompt):
+            caption = caption[len(prompt):].strip()
+        else:
+            caption = caption.strip()
     print(caption)
-
     storage = "postContent"
     today = datetime.date.today().strftime("%Y-%m-%d")
     folder = os.path.join(storage, today)
@@ -22,8 +24,8 @@ def saveCaption(taskList, modelPath="./capGenAI"):
     captionFile = os.path.join(folder, "caption.txt")
     with open(captionFile, "a", encoding="utf-8") as f:
         f.write(caption)
-
-tasks = ["Completed a course", "Learnt python", "Dance practice", "Conjuring"]
-saveCaption(tasks)
+    if caption == "":
+        caption = saveCaption(taskList)
+    return caption
 
 
