@@ -18,15 +18,25 @@ Key features include:
 ## Project Structure
 
 autoPost/
+
 ├── aiModel/
+
 │ ├── init.py
-│ ├── aiInterface.py 
+
+│ ├── aiInterface.py
+
 │ ├── captionGeneration.py
+
 │ └── jsonToDataset.py
+
 ├── Telegram/
+
 │ ├── init.py
+
 │ ├── telegramInterface.py
+
 │ └── contentExtractor.py
+
 └── README.md # Project documentation
 
 ## Packages
