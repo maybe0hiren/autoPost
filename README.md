@@ -31,12 +31,12 @@ autoPost/
 
 ## Packages
 
-transformers   
-torch  
-peft  
-telebot   
-schedule  
-requests  
+- transformers   
+- torch  
+- peft  
+- telebot   
+- schedule  
+- requests  
 
 
 ## Telegram Bot
