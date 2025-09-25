@@ -59,10 +59,25 @@ def parent():
     sendCaption(caption)
     return 
 
-print("Bot running...")
-pollingThread = threading.Thread(target=bot.polling, daemon=True)
-pollingThread.start()
-schedule.every().day.at("01:10").do(parent)
-while True:
-    schedule.run_pending()
-    time.sleep(10)
+def is_connected():
+    try:
+        requests.get("https://www.google.com", timeout=5)
+        return True
+    except requests.RequestException:
+        return False
+try:
+    if is_connected():
+        print("Connection Activated...Bot running...")
+        pollingThread = threading.Thread(target=bot.polling, daemon=True)
+        pollingThread.start()
+        schedule.every().day.at("01:10").do(parent)
+        while True:
+            schedule.run_pending()
+            time.sleep(10)
+    else:
+        print("⚠️ No internet. Waiting to retry...")
+        time.sleep(10)
+except Exception as e:
+    print(f"Errer: {e}")
+    print("Restarting...")
+    time.sleep(5)
