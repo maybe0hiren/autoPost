@@ -7,6 +7,7 @@ import schedule
 import time
 import threading
 from contentExtractor import saveTasks, saveImage, getBot, getData, saveEditedCaption
+import requests
 
 
 bot = getBot()
