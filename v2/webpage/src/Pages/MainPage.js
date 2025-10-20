@@ -8,8 +8,13 @@ function MainPage(){
     const [image, setImage] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [updates, setUpdates] = useState("Hello There...")
+    const [key, setKey] = useState("");
 
     async function uploadHandler(){
+        if (key !== "KEYxyz") {
+            setUpdates("Invalid key! Upload denied.");
+            return;
+        }
         if (!task){
             setTask(" ");
         }
@@ -51,7 +56,28 @@ function MainPage(){
         <div id='submission'>
             <input type='text' placeholder='Enter task' value={task} onChange={(e) => setTask(e.target.value)} />
             <br />
-            <input type='file' accept='image/*' onChange={(e) => setImage(Array.from(e.target.files))}/>
+            <label className="custom-file-label">
+                {image.length > 0 ? image.map(f => f.name).join(', ') : "Choose Image"}
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(Array.from(e.target.files))}
+                />
+            </label>
+            <br />
+            <div className="image-preview">
+                {image.length > 0 &&
+                    image.map((file, index) => (
+                    <img
+                        key={index}
+                        src={URL.createObjectURL(file)}
+                        alt={`preview ${index}`}
+                        className="preview-img"
+                    />
+                    ))}
+            </div>
+            <br />
+            <input type='password' placeholder='Enter KEY' value={key} onChange={(e) => setKey(e.target.value)} />
             <br />
             <button onClick={uploadHandler} disabled={uploading || (!task && image.length === 0)}>{uploading ? "Uploading..." : "Upload"}</button>
             <p id='display'>{updates}</p>
