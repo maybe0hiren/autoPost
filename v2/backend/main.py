@@ -76,7 +76,9 @@ def getPostContent():
 
 if __name__ == "__main__":
     tasks = getPostContent()
-    print("\nTasks list:")
-    for t in tasks:
-        print("-", t)
-
+    caption = "NOTHING TODAY!"
+    if(tasks != []):
+        tasks = ", ".join(tasks)
+        prompt = "I like journaling about my Computer Science Engineering self learning journey on twitter and instagram and also sometimes about how I am feeling about the day... Keep it breif but well explained caption for the posts. Add hashtags mid sentences, don't bunch them at the end. Most of the times they are about webdev projects and theory, android development projects and theory, Artificial Intelligent projects and theory.... here are the tasks I did today: " + tasks + " The character limit is 280....Just give me 1 final well thought caption and nothing else... No Options, No reasoning nothing else if there are no tasks"
+        caption = getCaption(prompt)
+    print(caption)
