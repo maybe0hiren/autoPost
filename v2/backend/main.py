@@ -5,6 +5,7 @@ from supabase import create_client, Client
 import os
 import json
 import datetime
+import time
 import requests
 import random
 
@@ -83,36 +84,60 @@ def getDay():
         f.write(str(num + 1))
     return str(num)
 
-def postToX(caption, folder):
+def postToX(caption):
     url = "https://app.ayrshare.com/api/post"
     headers = {
         "Authorization": f"Bearer {ayshareKey}",
         "Content-Type": "application/json"
     }
-    try:
-        supported_ext = ('.jpg', '.jpeg', '.png')
-        all_images = [f for f in os.listdir(folder) if f.lower().endswith(supported_ext)]
-    except FileNotFoundError:
-        all_images = []
-    if len(all_images) > 4:
-        selected_images = random.sample(all_images, 4)
-    else:
-        selected_images = all_images
-    mediaUrls = [os.path.join(image_folder, img) for img in selected_images] if selected_images else []
+    # try:
+    #     supported_ext = ('.jpg', '.jpeg', '.png')
+    #     all_images = [f for f in os.listdir(folder) if f.lower().endswith(supported_ext)]
+    # except FileNotFoundError:
+    #     all_images = []
+    # if len(all_images) > 4:
+    #     selected_images = random.sample(all_images, 4)
+    # else:
+    #     selected_images = all_images
+    # mediaUrls = [os.path.join(image_folder, img) for img in selected_images] if selected_images else []
 
     data = {    
         "post": caption,
         "platforms": ["twitter"]
     }
-    if mediaUrls:
-        data["mediaUrls"] = mediaUrls
+    # if mediaUrls:
+    #     data["mediaUrls"] = mediaUrls
 
     response = requests.post(url, headers=headers, data=json.dumps(data))
     print(f"{response.json()}\n")
 
+def alternateDayCheck(start_date):
+    days_elapsed = (datetime.date.today() - start_date).days
+    return days_elapsed % 2 == 0
 
+def scheduler():
+    start_date = datetime.date.today() - datetime.timedelta(days=1)
+    print("Auto poster running... will post every alternate day at 10:00 PM.\n")
 
-if __name__ == "__main__":
+    while True:
+        now = datetime.datetime.now()
+        target_time = now.replace(hour=22, minute=0, second=0, microsecond=0)
+
+        if now >= target_time:
+            target_time += datetime.timedelta(days=1)
+
+        seconds_until_target = (target_time - now).total_seconds()
+        print(f"Sleeping {int(seconds_until_target)}s until next check at {target_time.strftime('%Y-%m-%d %H:%M:%S')}...")
+        time.sleep(seconds_until_target)
+
+        if alternateDayCheck(start_date):
+            print(f"\n[{datetime.datetime.now()}] Running task for today...\n")
+            mainFunction()
+        else:
+            print(f"\n[{datetime.datetime.now()}] Skipping today (alternate day rule).\n")
+        time.sleep(60)
+
+def mainFunction():
     tasks = getPostContent()
     caption = "NOTHING TODAY!"
     if(tasks != []):
@@ -122,4 +147,6 @@ if __name__ == "__main__":
         caption = f"Day {getDay()} " + caption
         postToX(caption)
         print(f"Posted: {caption} to twitter!")
-    
+
+if __name__ == "__main__":
+    scheduler()
