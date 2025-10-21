@@ -17,5 +17,35 @@ Key features include:
 ## Packages
 
 - google-genai 
-- supabase  
+- supabase  (Python)
+- python-dotenv
 - requests, os, json, datetime, time, requests
+
+- supabase (React)
+- react-router-dom
+
+---
+
+## Supabase
+
+- Create project and get project URL and KEY
+- Create a table: {id, task, imageURLs} (Add imageURLs if planning on posting images)
+- Disable RLS on database (For personal project)
+- Add anon permissions to storage (For personal projects and if planning on posting images)
+
+---
+
+## Ayshare
+
+- Make an account
+- Link the social media you want (X for this project)
+- Get Ayshare API key
+
+---
+
+## Keys
+
+- Gemini API key
+- Supabase Key
+- Supabase URL
+- Ayshare API Key
