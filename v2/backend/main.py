@@ -7,7 +7,6 @@ import json
 import datetime
 import time
 import requests
-import random
 
 
 load_dotenv()
@@ -117,7 +116,7 @@ def alternateDayCheck(start_date):
 
 def scheduler():
     start_date = datetime.date.today() - datetime.timedelta(days=1)
-    print("Auto poster running... will post every alternate day at 10:00 PM.\n")
+    print("AutoPoste running... will post every alternate day at 10:00 PM.\n")
 
     while True:
         now = datetime.datetime.now()
