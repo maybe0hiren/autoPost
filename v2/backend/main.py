@@ -116,7 +116,7 @@ def alternateDayCheck(start_date):
 
 def scheduler():
     start_date = datetime.date.today() - datetime.timedelta(days=1)
-    print("AutoPoste running... will post every alternate day at 10:00 PM.\n")
+    print("AutoPost running... will post every alternate day at 10:00 PM.\n")
 
     while True:
         now = datetime.datetime.now()
