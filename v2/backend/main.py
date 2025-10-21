@@ -6,6 +6,7 @@ import os
 import json
 import datetime
 import requests
+import random
 
 
 load_dotenv()
@@ -27,51 +28,50 @@ def getCaption(prompt):
 
 
 def getPostContent():
-    today = datetime.date.today().strftime("%Y-%m-%d")
-    folderName = datetime.date.today().strftime("%Y-%m-%d")
-    os.makedirs(f"content/{folderName}", exist_ok=True)
-    print(f"Saving Images... to content/{folderName}")
+    # today = datetime.date.today().strftime("%Y-%m-%d")
+    # folderName = datetime.date.today().strftime("%Y-%m-%d")
+    # os.makedirs(f"content/{folderName}", exist_ok=True)
+    # print(f"Saving Images... to content/{folderName}")
     response = supabase.table("postContent").select("*").execute()
     if not response.data:
         print(f"Fetching Failed: {response}")
         return []
     rows = response.data or []
     tasks = []
-    imageCounter = 1
+    # imageCounter = 1
     
     for row in rows:
         task = row.get("task")
-        imageURL = row.get("imageURLs") or []
-        try:
-            imageURL = json.loads(imageURL)
-        except json.JSONDecodeError:
-            imageURL = []
+        # imageURL = row.get("imageURLs") or []
+        # try:
+        #     imageURL = json.loads(imageURL)
+        # except json.JSONDecodeError:
+        #     imageURL = []
 
         if task and task.strip():
             tasks.append(task.strip())
 
-        for url in imageURL:
-            if not url or not isinstance(url, str):
-                continue
+        # for url in imageURL:
+        #     if not url or not isinstance(url, str):
+        #         continue
         
-            extension = os.path.splitext(url)[1] or ".jpg"
-            imageName = f"image{imageCounter}{extension}"
-            imagePath = f"content/{today}/{imageName}"
+            # extension = os.path.splitext(url)[1] or ".jpg"
+            # imageName = f"image{imageCounter}{extension}"
+            # imagePath = f"content/{today}/{imageName}"
 
-            try:
-                response = requests.get(url, timeout=10)
-                if response.status_code == 200:
-                    with open(imagePath, "wb") as f:
-                        f.write(response.content)
-                    print(f"Downloaded {imageName}")
-                    imageCounter += 1
-                    supabase.table("postContent").delete().neq("id", 0).execute()
-                else:
-                    print(f"Download Failed: {response.status_code}")
-            except Exception as e:
-                print(f"Error downloading image: {e}")
-
-    print(f"\nDownload complete! {imageCounter-1} images saved in '{today}' folder.")
+            # try:
+            #     response = requests.get(url, timeout=10)
+            #     if response.status_code == 200:
+            #         # with open(imagePath, "wb") as f:
+            #         #     f.write(response.content)
+            #         # print(f"Downloaded {imageName}")
+            #         # imageCounter += 1
+            #     else:
+            #         print(f"Download Failed: {response.status_code}")
+            # except Exception as e:
+            #     print(f"Error downloading image: {e}")
+    # print(f"\nDownload complete! {imageCounter-1} images saved in '{today}' folder.")
+    supabase.table("postContent").delete().neq("id", 0).execute()
     print(f"Tasks found: {len(tasks)}")
     return tasks
 
@@ -83,17 +83,29 @@ def getDay():
         f.write(str(num + 1))
     return str(num)
 
-def postToX(caption):
+def postToX(caption, folder):
     url = "https://app.ayrshare.com/api/post"
     headers = {
         "Authorization": f"Bearer {ayshareKey}",
         "Content-Type": "application/json"
     }
+    try:
+        supported_ext = ('.jpg', '.jpeg', '.png')
+        all_images = [f for f in os.listdir(folder) if f.lower().endswith(supported_ext)]
+    except FileNotFoundError:
+        all_images = []
+    if len(all_images) > 4:
+        selected_images = random.sample(all_images, 4)
+    else:
+        selected_images = all_images
+    mediaUrls = [os.path.join(image_folder, img) for img in selected_images] if selected_images else []
 
-    data = {
+    data = {    
         "post": caption,
         "platforms": ["twitter"]
     }
+    if mediaUrls:
+        data["mediaUrls"] = mediaUrls
 
     response = requests.post(url, headers=headers, data=json.dumps(data))
     print(f"{response.json()}\n")

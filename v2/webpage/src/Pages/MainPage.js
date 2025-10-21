@@ -11,7 +11,7 @@ function MainPage(){
     const [key, setKey] = useState("");
 
     async function uploadHandler(){
-        if (key !== "KEYxyz") {
+        if (key !== "interstellar123") {
             setUpdates("Invalid key! Upload denied.");
             return;
         }
@@ -54,9 +54,10 @@ function MainPage(){
     return(
         <>
         <div id='submission'>
+            <h1>AutoPost</h1>
             <input type='text' placeholder='Enter task' value={task} onChange={(e) => setTask(e.target.value)} />
             <br />
-            <label className="custom-file-label">
+            {/* <label className="custom-file-label">
                 {image.length > 0 ? image.map(f => f.name).join(', ') : "Choose Image"}
                 <input
                     type="file"
@@ -76,7 +77,7 @@ function MainPage(){
                     />
                     ))}
             </div>
-            <br />
+            <br /> */}
             <input type='password' placeholder='Enter KEY' value={key} onChange={(e) => setKey(e.target.value)} />
             <br />
             <button onClick={uploadHandler} disabled={uploading || (!task && image.length === 0)}>{uploading ? "Uploading..." : "Upload"}</button>
