@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {supabase} from '../supabaseClient';
 import './MainPage.css'
@@ -9,9 +9,35 @@ function MainPage(){
     const [uploading, setUploading] = useState(false);
     const [updates, setUpdates] = useState("Hello There...")
     const [key, setKey] = useState("");
+    const [tasksList, setTasksList] = useState([]);
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    async function fetchTasks() {
+        const { data, error } = await supabase.from('postContent').select('*').order('id', { ascending: false });
+        if (error) {
+            console.error("Error fetching tasks:", error);
+            setUpdates("Error fetching tasks!");
+        } else {
+            setTasksList(data);
+        }
+    }
+
+    async function deleteTask(id) {
+        const { error } = await supabase.from('postContent').delete().eq('id', id);
+        if (error) {
+            console.error("Error deleting task:", error);
+            setUpdates("Error deleting task!");
+        } else {
+            setUpdates("Task deleted!");
+            setTasksList(tasksList.filter((t) => t.id !== id)); 
+        }
+    }
 
     async function uploadHandler(){
-        if (key !== "interstellar123") {
+        if (key !== "RANDOM PASSWORD") {
             setUpdates("Invalid key! Upload denied.");
             return;
         }
@@ -83,6 +109,23 @@ function MainPage(){
             <button onClick={uploadHandler} disabled={uploading || (!task && image.length === 0)}>{uploading ? "Uploading..." : "Upload"}</button>
             <p id='display'>{updates}</p>
         </div>
+        <div id="taskList">
+                    <h2>Uploaded Tasks</h2>
+                    {tasksList.length === 0 ? (
+                        <p>No tasks found.</p>
+                    ) : (
+                        <ul>
+                            {tasksList.map((t) => (
+                                <li key={t.id}>
+                                    {t.task}
+                                    <button onClick={() => deleteTask(t.id)} style={{ marginLeft: "10px" }}>
+                                        Delete
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
         </>
     );
 }

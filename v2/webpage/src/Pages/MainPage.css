@@ -18,6 +18,10 @@ body, html {
   text-align: center;
 }
 
+#submission h1 {
+    color: #d3aaff;
+}
+
 #submission input[type="text"],
 #submission input[type="file"],
 #submission input[type="password"] {
@@ -112,4 +116,80 @@ body, html {
   margin-top: 20px;
   color: #d3aaff;
   font-size: 14px;
+}
+
+
+/* 🔽 Task List Section 🔽 */
+#taskList {
+  background: rgba(128, 0, 128, 0.25);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 400px;
+  margin: 80px auto;
+  box-shadow: 0 8px 30px rgba(147, 112, 219, 0.6);
+  text-align: center;
+}
+
+#taskList h2 {
+  color: #d3aaff;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+#taskList ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#taskList li {
+  background: rgba(155, 48, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+#taskList li:hover {
+  background: rgba(155, 48, 255, 0.25);
+  transform: scale(1.02);
+}
+
+#taskList li span {
+  color: #fff;
+  font-size: 15px;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* 🔽 Delete Button Styling 🔽 */
+#taskList button {
+  background-color: #ff4d4d;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+#taskList button:hover {
+  background-color: #ff3333;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.7);
+}
+
+/* Empty message */
+#taskList p {
+  text-align: center;
+  color: #b890ff;
+  font-size: 15px;
+  margin-top: 10px;
 }
