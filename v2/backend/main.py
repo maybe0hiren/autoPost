@@ -71,7 +71,6 @@ def getPostContent():
             # except Exception as e:
             #     print(f"Error downloading image: {e}")
     # print(f"\nDownload complete! {imageCounter-1} images saved in '{today}' folder.")
-    supabase.table("postContent").delete().neq("id", 0).execute()
     print(f"Tasks found: {len(tasks)}")
     return tasks
 
@@ -79,8 +78,6 @@ def getDay():
     with open("day.txt", "r") as f:
         content = f.read().strip()
     num = int(content)
-    with open("day.txt", "w") as f:
-        f.write(str(num + 1))
     return str(num)
 
 def postToX(caption):
@@ -108,14 +105,18 @@ def postToX(caption):
     #     data["mediaUrls"] = mediaUrls
 
     response = requests.post(url, headers=headers, data=json.dumps(data))
-    print(f"{response.json()}\n")
+    response = response.json()
+    response = response["status"]
+    return response
 
-def alternateDayCheck(start_date):
-    days_elapsed = (datetime.date.today() - start_date).days
-    return days_elapsed % 2 == 0
+def alternateDayCheck():
+    with open("condition.txt", "r") as f:
+        condition = f.read().strip()
+    condition = int(condition)
+    return condition
 
 def scheduler():
-    start_date = datetime.date.today() - datetime.timedelta(days=1)
+    start_date = datetime.date.today() #- datetime.timedelta(days=1)
     print("AutoPost running... will post every alternate day at 10:00 PM.\n")
 
     while True:
@@ -129,11 +130,15 @@ def scheduler():
         print(f"Sleeping {int(seconds_until_target)}s until next check at {target_time.strftime('%Y-%m-%d %H:%M:%S')}...")
         time.sleep(seconds_until_target)
 
-        if alternateDayCheck(start_date):
+        if alternateDayCheck():
             print(f"\n[{datetime.datetime.now()}] Running task for today...\n")
             mainFunction()
+            with open("condition.txt", "w") as f:
+                    f.write("0")
         else:
             print(f"\n[{datetime.datetime.now()}] Skipping today (alternate day rule).\n")
+            with open("condition.txt", "w") as f:
+                    f.write("1")
         time.sleep(60)
 
 def mainFunction():
@@ -141,11 +146,24 @@ def mainFunction():
     caption = "NOTHING TODAY!"
     if(tasks != []):
         tasks = ", ".join(tasks)
-        prompt = "I like journaling about my Computer Science Engineering self learning journey on twitter and instagram and also sometimes about how I am feeling about the day... Keep it breif but well explained caption for the posts also add one or two relevant emojis. Add hashtags mid sentences, don't bunch them at the end. Most of the times they are about webdev projects and theory, android development projects and theory, Artificial Intelligent projects and theory.... here are the tasks I did today: " + tasks + " The character limit is 230....Just give me 1 final well thought caption and nothing else... No Options, No reasoning nothing else if there are no tasks"
+        prompt = "Here is a list of tasks id did: " + tasks + " Make a twitter caption journaling about the tasks. Keep it brief. The number of characters must not exceed 230. Don't give me options or other conversational lines, just the caption... Short and concise, not more than 230"
         caption = getCaption(prompt)
-        caption = f"Day {getDay()} " + caption
-        postToX(caption)
-        print(f"Posted: {caption} to twitter!")
+        caption = f"Day {getDay()}: " + caption
+        if len(caption)<250:
+            response = postToX(caption)
+            if response == "success":
+                print(f"Posted: {caption} to twitter!")
+                supabase.table("postContent").delete().neq("id", 0).execute()
+                with open("day.txt", "r") as f:
+                    content = f.read().strip()
+                    num = int(content)
+                with open("day.txt", "w") as f:
+                    f.write(str(num + 1))
+            else:
+                mainFunction();
+        else:
+            mainFunction();
+            
 
 if __name__ == "__main__":
     scheduler()
