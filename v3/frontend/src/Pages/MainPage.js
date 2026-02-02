@@ -11,8 +11,13 @@ function MainPage(){
     const [statusColour, setStatusColour] = useState("red");
     const [serverStatus, setServerStatus] = useState("");
     const [serverMessage, setServerMessage] = useState("");
+    const [dayStatus, setDayStatus] = useState("");
     useEffect(() => {
-        getServerStatus();
+        function startUp(){
+            getServerStatus();
+            getDayStatus();
+        }
+        startUp();
     }, []);
 
     async function getServerStatus(){
@@ -23,6 +28,20 @@ function MainPage(){
             setStatusColour("green");
         } catch(err) {
             setServerStatus("Server Offline");
+        }
+    }
+
+    async function getDayStatus() {
+        try{
+            const res = await fetch(`${api}/dayStatus`);
+            const data = await res.json();
+            if (data.status) {
+                setDayStatus("Posting Today...");
+            } else {
+                setDayStatus("Not posting Today...");
+            }
+        } catch(err) {
+            setDayStatus("Cannot retrieve day status");
         }
     }
 
@@ -59,6 +78,7 @@ function MainPage(){
                 <input className="inputBar" type="password" placeholder="Key" value={ key } onChange={(e) => setKey(e.target.value)} />
                 <button className="submit" type="submit" onClick={sendTask}>Submit</button>
                 <br />
+                <p>{dayStatus}</p>
                 <p style={{ color: statusColour }}>{serverStatus}</p>
                 <p>{serverMessage}</p>
             </Card> 

@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const acceptTasks = require('./functions/accept-tasks');
+const altDayCheck = require("./functions/alt-day-check");
 
 
 const HttpError = require("./models/http-error");
@@ -14,9 +15,16 @@ app.use(express.json());
 
 
 app.get("/status", (req, res, next) => {
-    res.status(200).json({
-        status: "Server Online"
-    })
+  res.status(200).json({
+      status: "Server Online"
+  })
+})
+
+app.get("/dayStatus", (req, res, next) => {
+  const dayStatus = altDayCheck();
+  res.status(200).json({
+      status: dayStatus
+  })
 })
 
 app.post("/task", acceptTasks.acceptTasks);
