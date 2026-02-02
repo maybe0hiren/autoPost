@@ -5,10 +5,7 @@ import './MainPage.css';
 import Card from "../Components/Card";
 
 function MainPage(){
-    // const dummyServerStatur = {
-    //     status: "Server Running"
-    // }
-    const api = "DUMMY";
+    const api = "http://localhost:5000";
     const [task, setTask] = useState("");
     const [key, setKey] = useState("");
     const [statusColour, setStatusColour] = useState("red");
@@ -62,7 +59,6 @@ function MainPage(){
                 <input className="inputBar" type="password" placeholder="Key" value={ key } onChange={(e) => setKey(e.target.value)} />
                 <button className="submit" type="submit" onClick={sendTask}>Submit</button>
                 <br />
-                {/* <p>Server Message: {dummyServerStatur.status}</p> */}
                 <p style={{ color: statusColour }}>{serverStatus}</p>
                 <p>{serverMessage}</p>
             </Card> 

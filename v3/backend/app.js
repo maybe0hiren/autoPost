@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const acceptTasks = require('./functions/accept-tasks');
+
 
 const HttpError = require("./models/http-error");
 const app = express();
@@ -17,22 +19,7 @@ app.get("/status", (req, res, next) => {
     })
 })
 
-app.post("/task", (req, res, next) => {
-    const { task, key } = req.body;
-    if (key !== process.env.KEY){
-        const error = new HttpError("Invalid Key...", 401);
-        return next(error)
-    } 
-    else if (!task){
-        const error = new HttpError("Empty Task...", 400);
-        return next(error);
-    }
-    console.log(task);
-    res.status(201).json({
-        success: "ok",
-        message: "Task saved successfully"
-    });
-})
+app.post("/task", acceptTasks.acceptTasks);
 
 app.use((error, req, res, next) => {
   if (res.headersSent) {
