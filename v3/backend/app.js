@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const acceptTasks = require('./functions/accept-tasks');
 const altDayCheck = require("./functions/alt-day-check");
+const getTasks = require("./functions/retrieve-tasks");
 
 
 const HttpError = require("./models/http-error");
@@ -26,6 +27,24 @@ app.get("/dayStatus", (req, res, next) => {
       status: dayStatus
   })
 })
+
+app.get("/getTasks", (req, res, next) => {
+  try {
+    const tasks = getTasks();
+
+    res.status(200).json({
+      success: "ok",
+      tasks: tasks
+    });
+  } catch (err) {
+    console.log("ERROR in /getTasks:", err);
+
+    res.status(500).json({
+      success: "fail",
+      message: "Could not retrieve tasks"
+    });
+  }
+});
 
 app.post("/task", acceptTasks.acceptTasks);
 

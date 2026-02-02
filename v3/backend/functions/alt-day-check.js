@@ -6,4 +6,4 @@ function altDayCheck() {
     return false;
 }
 
-exports.altDayCheck = altDayCheck;
+module.exports = altDayCheck;

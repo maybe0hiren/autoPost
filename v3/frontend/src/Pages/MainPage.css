@@ -40,3 +40,41 @@ body{
   border-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
 }
+
+.buttons {
+  display: flex;
+  gap: 15px; 
+  justify-content: center; 
+}
+
+
+.tasksPageLayout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasksContainer {
+  flex: 1;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  padding: 10px;
+}
+
+.tasksContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tasksContainer::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.backBtn {
+  margin-top: 15px;
+  align-self: center;
+}

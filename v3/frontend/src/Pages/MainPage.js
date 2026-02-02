@@ -1,10 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import './MainPage.css';
 import Card from "../Components/Card";
 
 function MainPage(){
+    const navigate = useNavigate();
     const api = "http://localhost:5000";
     const [task, setTask] = useState("");
     const [key, setKey] = useState("");
@@ -66,6 +68,10 @@ function MainPage(){
         }
     }
 
+    function goToTasks(){
+        navigate('/tasks');
+    }
+
 
     return(
         <>
@@ -76,7 +82,10 @@ function MainPage(){
                 <input className="inputBar" type="text" placeholder="Task" value={ task } onChange={(e) => setTask(e.target.value)}/>
                 <br />
                 <input className="inputBar" type="password" placeholder="Key" value={ key } onChange={(e) => setKey(e.target.value)} />
-                <button className="submit" type="submit" onClick={sendTask}>Submit</button>
+                <div className="buttons">
+                    <button className="submit" type="submit" onClick={sendTask}>Submit</button>
+                    <button className="submit" onClick={goToTasks}>Tasks</button>
+                </div>
                 <br />
                 <p>{dayStatus}</p>
                 <p style={{ color: statusColour }}>{serverStatus}</p>
