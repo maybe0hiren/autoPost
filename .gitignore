@@ -1,12 +1,9 @@
 env/
 etc/
 cache/
-capGenAI/
 __pycache__
-captions.json
-postContent/
 .env
 
 
-v3/backend/node_modules
-v3/backend/data
+backend/node_modules
+backend/data

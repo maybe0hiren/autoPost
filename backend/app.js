@@ -5,7 +5,8 @@ require("dotenv").config();
 const acceptTasks = require('./functions/accept-tasks');
 const altDayCheck = require("./functions/alt-day-check");
 const getTasks = require("./functions/retrieve-tasks");
-
+const deleteTask = require("./functions/dlt-task");
+const editTask = require("./functions/edit-task");
 
 const HttpError = require("./models/http-error");
 const app = express();
@@ -22,7 +23,7 @@ app.get("/status", (req, res, next) => {
 })
 
 app.get("/dayStatus", (req, res, next) => {
-  const dayStatus = altDayCheck();
+  const dayStatus = altDayCheck().toString();
   res.status(200).json({
       status: dayStatus
   })
@@ -47,6 +48,24 @@ app.get("/getTasks", (req, res, next) => {
 });
 
 app.post("/task", acceptTasks.acceptTasks);
+
+app.delete("/deleteTask", (req, res, next) => {
+  const { task } = req.body;
+  deleteTask(task);
+  res.status(200).json({
+    success: "ok",
+  });
+});
+
+app.patch("/editTask", (req, res) => {
+  const { oldTask, newTask } = req.body;
+
+  editTask(oldTask, newTask);
+
+  res.status(200).json({
+    success: "ok",
+  });
+});
 
 app.use((error, req, res, next) => {
   if (res.headersSent) {

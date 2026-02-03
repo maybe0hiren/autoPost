@@ -33,6 +33,36 @@ function TaskPage() {
     }
   }
 
+  async function handleDelete(taskText) {
+    await fetch(`${api}/deleteTask`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ task: taskText })
+    });
+
+    getTasks(); 
+  }
+
+  async function handleEdit(oldTask, newTask) {
+    if (!newTask.trim()) return;
+
+    await fetch(`${api}/editTask`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        oldTask: oldTask,
+        newTask: newTask
+      })
+    });
+
+    getTasks();
+  }
+
+
   return (
     <>
       <div className="inputBox">
@@ -46,8 +76,8 @@ function TaskPage() {
                   <TaskCard
                     key={index}
                     task={t.task}
-                    onEdit={() => alert("Edit clicked")}
-                    onDelete={() => alert("Delete clicked")}
+                    onEdit={handleEdit}
+                    onDelete={() => handleDelete(t.task)}
                   />
                 ))
               )}

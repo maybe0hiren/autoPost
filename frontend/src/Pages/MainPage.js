@@ -37,7 +37,7 @@ function MainPage(){
         try{
             const res = await fetch(`${api}/dayStatus`);
             const data = await res.json();
-            if (data.status) {
+            if (data.status === "true") {
                 setDayStatus("Posting Today...");
             } else {
                 setDayStatus("Not posting Today...");
