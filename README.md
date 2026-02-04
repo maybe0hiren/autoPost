@@ -117,21 +117,21 @@ Posting time is configurable inside the scheduler module.
 
 ## Setup Instructions
 
-1. Clone Repository
-    git clone <repo-url>
-    cd autoPost
+1. Clone Repository  
+    git clone https://github.com/maybe0hiren/autoPost.git  
+    cd autoPost  
 
-2. Install Backend Dependencies
-    npm install
+2. Install Backend Dependencies  
+    npm install  
 
-3. Configure Environment Variables
-Create a .env file:
-    GEMINI_API_KEY=your_key
-    AYRSHARE_KEY=your_key
-    KEY=your_private_access_key
+3. Configure Environment Variables   
+Create a .env file:  
+    GEMINI_API_KEY=your_key  
+    AYRSHARE_KEY=your_key  
+    KEY=your_private_access_key  
 
-4. Start Backend
-    nodemon app.js
+4. Start Backend  
+    nodemon app.js  
 
-5. Start Frontend
-    npm start
+5. Start Frontend  
+    npm start  
