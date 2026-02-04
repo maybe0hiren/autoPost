@@ -73,8 +73,7 @@ Store these in your backend .env:
 
 AutoPost Core
 
-  Endpoint      Method   Description
-  ------------- -------- ------------------------------
+  Endpoint      Method   Description  
   /status       GET      Server online check  
   /dayStatus    GET      Alternate-day posting status  
   /getTasks     GET      Retrieve all saved tasks  
