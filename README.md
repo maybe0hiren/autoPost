@@ -75,13 +75,13 @@ AutoPost Core
 
   Endpoint      Method   Description
   ------------- -------- ------------------------------
-  /status       GET      Server online check
-  /dayStatus    GET      Alternate-day posting status
-  /getTasks     GET      Retrieve all saved tasks
-  /task         POST     Submit a new task
-  /editTask     PATCH    Edit an existing task
-  /deleteTask   DELETE   Delete a task
-  /logs         GET      Fetch latest status log
+  /status       GET      Server online check  
+  /dayStatus    GET      Alternate-day posting status  
+  /getTasks     GET      Retrieve all saved tasks  
+  /task         POST     Submit a new task  
+  /editTask     PATCH    Edit an existing task  
+  /deleteTask   DELETE   Delete a task  
+  /logs         GET      Fetch latest status log  
 
 ---
 
