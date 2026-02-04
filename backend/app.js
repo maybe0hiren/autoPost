@@ -1,12 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const fs = require("fs");
+const path = require("path");
 
 const acceptTasks = require('./functions/accept-tasks');
 const altDayCheck = require("./functions/alt-day-check");
 const getTasks = require("./functions/retrieve-tasks");
 const deleteTask = require("./functions/dlt-task");
 const editTask = require("./functions/edit-task");
+const startScheduler = require("./functions/scheduler");
 
 const HttpError = require("./models/http-error");
 const app = express();
@@ -14,12 +17,24 @@ const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
+startScheduler();
 
 
 app.get("/status", (req, res, next) => {
   res.status(200).json({
       status: "Server Online"
   })
+})
+
+app.get("/logs", (req, res, next) => {
+  const filePath = "./data/status.json";
+  if (!fs.existsSync(filePath)) {
+    return res.json({
+      message: "No logs yet."
+    });
+  }
+  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  res.status(200).json(data);
 })
 
 app.get("/dayStatus", (req, res, next) => {

@@ -66,7 +66,7 @@ function TaskPage() {
   return (
     <>
       <div className="inputBox">
-        <Card width="700px" height="550px">
+        <Card width="700px" height="auto">
           <div className="tasksPageLayout">
             <div className="tasksContainer">
               {tasks.length === 0 ? (

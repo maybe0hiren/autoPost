@@ -14,13 +14,16 @@ function MainPage(){
     const [serverStatus, setServerStatus] = useState("");
     const [serverMessage, setServerMessage] = useState("");
     const [dayStatus, setDayStatus] = useState("");
+    const [log, setLog] = useState(null);
     useEffect(() => {
         function startUp(){
             getServerStatus();
             getDayStatus();
+            fetchLogs()
         }
         startUp();
     }, []);
+
 
     async function getServerStatus(){
         try{
@@ -33,6 +36,11 @@ function MainPage(){
         }
     }
 
+    async function fetchLogs() {
+        const res = await fetch("http://localhost:5000/logs");
+        const data = await res.json();
+        setLog(data);
+    }
     async function getDayStatus() {
         try{
             const res = await fetch(`${api}/dayStatus`);
@@ -76,7 +84,7 @@ function MainPage(){
     return(
         <>
         <div className="inputBox">
-            <Card width="700px" height="350px">
+            <Card width="700px" height="auto">
                 <h1>AutoPost</h1>
                 <br />
                 <input className="inputBar" type="text" placeholder="Task" value={ task } onChange={(e) => setTask(e.target.value)}/>
@@ -90,6 +98,14 @@ function MainPage(){
                 <p>{dayStatus}</p>
                 <p style={{ color: statusColour }}>{serverStatus}</p>
                 <p>{serverMessage}</p>
+                {log && (
+                    <>
+                    <p>Message: {log.message}</p>
+                    {log.caption && (
+                        <p>Posted Caption: {log.caption}</p>
+                    )}
+                    </>
+                )}
             </Card> 
         </div>
         </>
