@@ -1,51 +1,135 @@
-# autoPost -- v2
+# AutoPost 
 Automated journaling agent using AI...
 
 
 ## Project Description
 
-autoPost is an AI-driven automation system designed to generate personalized social media captions using Gemini-2.5-flash model. It includes a react webpage for the client interacting with a python script running on local device to handel the posting. Client and Server communicate through Supabase, enabling seamless automation of content creation and publishing workflows without manual intervention.
+AutoPost is an AI-powered automation system that generates short
+journal-style captions from daily tasks and posts them automatically to
+X (formerly Twitter).
 
-Key features include:  
-- Gemini-2.5-flash api communication  
-- Automated X (formerly twitter) posting  
-- Schedule-based automation for timed alternate day posting.   
-- Modular, maintainable codebase organized for extension and customization.
+The system consists of:
+
+-   A React frontend where users can submit, edit, and manage tasks
+-   A Node.js + Express backend that stores tasks, generates captions
+    using Gemini, and posts them via Ayrshare
+-   A built-in scheduler that runs automatically at a configured time on alternate days
+-   A live status logging system, so the frontend always shows the
+    latest posting updates
+
+AutoPost is modular, extendable, and designed for fully automated
+content workflows.
+
+---
+
+## Key Features
+
+-   Gemini-2.5-flash caption generation
+-   Automated posting to X using Ayrshare
+-   Task submission + edit + delete support
+-   Alternate-day scheduled posting
+-   Persistent status updates (success, failure, last run, caption)
+-   JSON-based local task storage
 
 ---
 
 ## Packages
 
-- google-genai 
-- supabase  (Python)
-- python-dotenv
-- requests, os, json, datetime, time, requests
+Backend Dependencies
 
-- supabase (React)
-- react-router-dom
+-   express
+-   cors
+-   dotenv
+-   fs, path
+-   http-proxy-middleware (for ngrok multi-project support)
 
----
+AI + Posting
 
-## Supabase
-
-- Create project and get project URL and KEY
-- Create a table: {id, task, imageURLs} (Add imageURLs if planning on posting images)
-- Disable RLS on database (For personal project)
-- Add anon permissions to storage (For personal projects and if planning on posting images)
+-   @google/generative-ai
+-   node-fetch (or built-in fetch in Node 18+)
 
 ---
 
 ## Ayshare
 
-- Make an account
-- Link the social media you want (X for this project)
-- Get Ayshare API key
+1.  Create an account at Ayrshare
+2.  Link your X (Twitter) profile
+3.  Generate an API key
+4.  Add it to your .env file
 
 ---
 
 ## Keys
 
-- Gemini API key
-- Supabase Key
-- Supabase URL
-- Ayshare API Key
+Store these in your backend .env:
+
+-   GEMINI_API_KEY
+-   AYRSHARE_KEY
+-   KEY (frontend authentication key)
+
+---
+
+## Backend Endpoints
+
+AutoPost Core
+
+  Endpoint      Method   Description
+  ------------- -------- ------------------------------
+  /status       GET      Server online check
+  /dayStatus    GET      Alternate-day posting status
+  /getTasks     GET      Retrieve all saved tasks
+  /task         POST     Submit a new task
+  /editTask     PATCH    Edit an existing task
+  /deleteTask   DELETE   Delete a task
+  /logs         GET      Fetch latest status log
+
+---
+
+## Task Storage
+
+Tasks are stored locally in:
+    /data/tasks.json
+
+Status logs are stored in:
+    /data/status.json
+
+Day counter is stored in:
+    /data/day.txt
+
+---
+
+## Scheduler
+
+autoPost v3 includes a built-in scheduler that:
+
+-   Runs daily
+-   Posts only on alternate days
+-   Generates captions from tasks
+-   Retries posting if failures occur
+-   Clears tasks after successful posting
+-   Updates frontend-visible logs
+
+Posting time is configurable inside the scheduler module.
+
+---
+
+## Setup Instructions
+
+1. Clone Repository
+    git clone <repo-url>
+    cd autoPost
+
+2. Install Backend Dependencies
+    npm install
+
+3. Configure Environment Variables
+Create a .env file:
+    GEMINI_API_KEY=your_key
+    AYRSHARE_KEY=your_key
+    KEY=your_private_access_key
+
+4. Start Backend
+    nodemon app.js
+
+5. Start Frontend
+    npm start
